@@ -19,12 +19,12 @@ Download and run the script directly:
 
 **Via GitLab:**
 ```bash
-curl -sSL https://gitlab.pascalheim.de/serverhype/docker-yt/-/raw/main/install.sh?ref_type=heads | bash
+curl -sSL https://gitlab.pascalheim.de/serverhype/gitlab-install-/raw/main/install.sh?ref_type=heads | bash
 ```
 
 **Via GitHub:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/serverhype1/docker-yt/refs/heads/main/gitlab/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/serverhype1/gitlab-install/refs/heads/main/gitlab/install.sh | bash
 ```
 
 ## Installation via Git Clone
@@ -33,14 +33,14 @@ Alternatively, clone the repository and run it locally:
 
 **Via GitLab:**
 ```bash
-git clone https://gitlab.pascalheim.de/serverhype/docker-yt.git
-cd docker-yt
+git clone https://gitlab.pascalheim.de/serverhype/gitlab-install.git
+cd gitlab-install
 ```
 
 **Via GitHub:**
 ```bash
-git clone https://github.com/serverhype1/docker-yt.git
-cd docker-yt
+git clone https://github.com/serverhype1/gitlab-install.git
+cd gitlab-install
 ```
 
 ## Notes
@@ -71,12 +71,12 @@ Das Skript direkt herunterladen und ausführen:
 
 **Über GitLab:**
 ```bash
-curl -sSL https://gitlab.pascalheim.de/serverhype/docker-yt/-/raw/main/install.sh?ref_type=heads | bash
+curl -sSL https://gitlab.pascalheim.de/serverhype/gitlab-install/-/raw/main/install.sh?ref_type=heads | bash
 ```
 
 **Über GitHub:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/serverhype1/docker-yt/refs/heads/main/gitlab/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/serverhype1/gitlab-install/refs/heads/main/gitlab/install.sh | bash
 ```
 
 ## Installation via Git Clone
@@ -85,18 +85,18 @@ Alternativ das Repository klonen und lokal ausführen:
 
 **Über GitLab:**
 ```bash
-git clone https://gitlab.pascalheim.de/serverhype/docker-yt.git
+git clone https://gitlab.pascalheim.de/serverhype/gitlab-install.git
 cd docker-yt
 ```
 
 **Über GitHub:**
 ```bash
-git clone https://github.com/serverhype1/docker-yt.git
+git clone https://github.com/serverhype1/gitlab-install.git
 cd docker-yt
 ```
 
 ## Hinweise
 
-- Das Repository wird sowohl auf [GitLab](https://gitlab.pascalheim.de/serverhype/docker-yt) als auch auf [GitHub](https://github.com/serverhype1/docker-yt) gepflegt — beide sind immer auf dem gleichen Stand.
+- Das Repository wird sowohl auf [GitLab](https://gitlab.pascalheim.de/serverhype/gitlab-install) als auch auf [GitHub](https://github.com/serverhype1/gitlab-install) gepflegt — beide sind immer auf dem gleichen Stand.
 - Bei der Wahl von **Caddy** als Reverse Proxy ist keine weitere Konfiguration nötig.
 - Bei **NGINX** muss die Konfiguration nach der Installation manuell angepasst werden.
