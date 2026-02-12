@@ -17,41 +17,40 @@ fi
 
 GITLAB_REPO="https://oauth2:${GITLAB_TOKEN}@gitlab.pascalheim.de/serverhype/gitlab-install.git"
 GITHUB_REPO="https://serverhype1:${GITHUB_TOKEN}@github.com/serverhype1/gitlab-install.git"
-
-WORK_DIR="/tmp/gitlab-github-sync"
-COMMIT_MSG="gitlab syc."
+GITLAB_BRANCH="clean-gitpush-script"
 
 set -e
 
 echo "=== GitLab -> GitHub Sync ==="
 
-# Arbeitsverzeichnis vorbereiten
-rm -rf "$WORK_DIR"
-mkdir -p "$WORK_DIR"
-
-# Von GitLab klonen
-echo "[1/4] Klone von GitLab..."
-git clone "$GITLAB_REPO" "${WORK_DIR}/repo"
-cd "${WORK_DIR}/repo"
-
-# GitHub als zweites Remote hinzufuegen
-echo "[2/4] Fuege GitHub Remote hinzu..."
-git remote add github "$GITHUB_REPO"
-
-# Auf sauberen Branch wechseln
-echo "[3/4] Wechsle zum sauberen Branch..."
-if git show-ref --verify --quiet refs/remotes/origin/clean-gitpush-script; then
-    echo "Verwende clean-gitpush-script Branch (saubere Historie)"
-    git checkout clean-gitpush-script
+# Schritt 1: Lokale Aenderungen zu GitLab pushen
+echo "[1/3] Pruefe lokale Aenderungen..."
+if [[ -n $(git status -s) ]]; then
+    echo "Aenderungen gefunden - committe zu GitLab..."
+    git add -A
+    git commit -m "Auto-sync: $(date '+%Y-%m-%d %H:%M:%S')"
+    git push origin "$GITLAB_BRANCH"
 else
-    DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
-    git checkout "$DEFAULT_BRANCH"
+    echo "Keine lokalen Aenderungen"
 fi
 
-echo "[4/4] Pushe nach GitHub (main)..."
-git push github HEAD:main --force
+# Schritt 2: Von GitLab zu GitHub synchronisieren
+echo "[2/3] Synchronisiere von GitLab zu GitHub..."
+WORK_DIR="/tmp/gitlab-github-sync-$$"
+rm -rf "$WORK_DIR"
+git clone "$GITLAB_REPO" "${WORK_DIR}"
+cd "${WORK_DIR}"
+
+# GitHub als zweites Remote hinzufuegen
+git remote add github "$GITHUB_REPO"
+
+# Zum sauberen Branch wechseln und zu GitHub pushen
+git checkout "$GITLAB_BRANCH"
+echo "[3/3] Pushe nach GitHub (main)..."
+git push github "${GITLAB_BRANCH}:main" --force
 
 # Aufraeumen
+cd - > /dev/null
 rm -rf "$WORK_DIR"
 
 echo ""
