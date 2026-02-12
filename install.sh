@@ -26,9 +26,17 @@ read_password() {
     echo "$password"
 }
 
+# Prüfe ob sudo installiert ist
+if command -v sudo &> /dev/null; then
+    echo "sudo ist bereits installiert."
+else
+    echo "sudo wird installiert..."
+    apt-get install sudo -y &> /dev/null
+    echo "sudo wurde installiert."
+fi
+
 # Systemaktualisierung
 echo "Systemaktualisierung wird durchgeführt..."
-apt-get install sudo -y &> /dev/null
 sudo apt-get update &> /dev/null && sudo apt-get upgrade -y &> /dev/null && sudo apt-get autoremove -y &> /dev/null
 sudo apt-get install curl sudo nano htop wget openssl -y &> /dev/null
 echo "Systemaktualisierung abgeschlossen."
