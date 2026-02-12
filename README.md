@@ -4,6 +4,7 @@ An interactive installation script that automatically sets up **GitLab** via Doc
 
 ## Features
 
+
 - Automatic GitLab installation via Docker
 - Optional SMTP configuration for email notifications
 - Optional OpenID Connect integration for Single Sign-On
