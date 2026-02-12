@@ -36,6 +36,7 @@ Alternatively, clone the repository and run it locally:
 git clone https://gitlab.pascalheim.de/serverhype/gitlab-install.git
 cd gitlab-install
 chmod +x install.sh 
+./install.sh
 ```
 
 **Via GitHub:**
@@ -43,6 +44,7 @@ chmod +x install.sh
 git clone https://github.com/serverhype1/gitlab-install.git
 cd gitlab-install
 chmod +x install.sh 
+./install.sh
 ```
 
 ## Notes
@@ -90,13 +92,15 @@ Alternativ das Repository klonen und lokal ausführen:
 git clone https://gitlab.pascalheim.de/serverhype/gitlab-install.git
 cd gitlab-install
 chmod +x install.sh 
+./install.sh
 ```
 
 **Über GitHub:**
 ```bash
 git clone https://github.com/serverhype1/gitlab-install.git
-cd gtlab-install
+cd gitlab-install
 chmod +x install.sh 
+./install.sh
 ```
 
 ## Hinweise
