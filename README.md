@@ -177,4 +177,3 @@ chmod +x install.sh
 - Das initiale Root-Passwort wird nach der Installation angezeigt und **läuft nach 24 Stunden ab** — ändere es sofort nach dem ersten Login.
 - GitLab-Daten werden unter `/root/daten/` gespeichert (Config, Logs, Daten).
 - Das Update-Skript vermeidet Duplikate — falls es bereits existiert, werden nur fehlende Einträge ergänzt.
-# Automatischer Sync Test
