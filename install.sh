@@ -38,7 +38,7 @@ fi
 # Systemaktualisierung
 echo "Systemaktualisierung wird durchgeführt..."
 sudo apt-get update &> /dev/null && sudo apt-get upgrade -y &> /dev/null && sudo apt-get autoremove -y &> /dev/null
-sudo apt-get install curl sudo nano htop wget openssl -y &> /dev/null
+sudo apt-get install curl nano htop wget openssl -y &> /dev/null
 echo "Systemaktualisierung abgeschlossen."
 
 # Prüfe ob Docker installiert ist
@@ -273,15 +273,41 @@ docker compose up -d &> /dev/null
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
 
-# Update Script erstellen
-mkdir -p /root/.scripts
+# Update Script fragen
+read -rp "Update Script erstellen? (y/n): " CREATE_UPDATE_SCRIPT < /dev/tty
+if [ "$CREATE_UPDATE_SCRIPT" = "y" ]; then
+    SCRIPT_PATH="/root/.scripts/update.sh"
+    CRON_JOB="0 3 * * 0 /root/.scripts/update.sh &> /dev/null"
 
-cat > /root/.scripts/update.sh <<- EOF
+    UPDATE_LINES='apt update && apt upgrade -y && apt autoremove -y
+apt dist-upgrade -y && apt autoremove -y
+
+# Alle docker-compose Projekte finden und updaten
+find /root -maxdepth 3 -name "docker-compose.yml" -o -name "compose.yml" | while read -r file; do
+    dir=$(dirname "$file")
+    echo "Updating Docker Compose project in: $dir"
+    cd "$dir"
+    docker compose pull
+    docker compose down
+    docker compose up -d
+done'
+
+    if [ -f "$SCRIPT_PATH" ]; then
+        echo "Update Script existiert bereits."
+        if grep -qF "apt dist-upgrade -y && apt autoremove -y" "$SCRIPT_PATH"; then
+            echo "Inhalt ist bereits vorhanden, keine Änderung nötig."
+        else
+            echo "Füge Update-Befehle in bestehendes Script ein..."
+            echo "$UPDATE_LINES" >> "$SCRIPT_PATH"
+            echo "Update-Befehle wurden eingefügt."
+        fi
+    else
+        echo "Update Script wird erstellt..."
+        mkdir -p /root/.scripts
+        cat << 'UPDATEEOF' > "$SCRIPT_PATH"
 #!/usr/bin/bash
-
-# System-Update
-apt-get update && apt-get upgrade -y && apt-get autoremove -y
-apt-get dist-upgrade -y && apt-get autoremove -y
+apt update && apt upgrade -y && apt autoremove -y
+apt dist-upgrade -y && apt autoremove -y
 
 # Alle docker-compose Projekte finden und updaten
 find /root -maxdepth 3 -name "docker-compose.yml" -o -name "compose.yml" | while read -r file; do
@@ -292,12 +318,20 @@ find /root -maxdepth 3 -name "docker-compose.yml" -o -name "compose.yml" | while
     docker compose down
     docker compose up -d
 done
-EOF
-chmod +x /root/.scripts/update.sh
+UPDATEEOF
+        chmod +x "$SCRIPT_PATH"
+        echo "Update Script wurde erstellt."
+    fi
 
-crontab -l 2>/dev/null | grep -v "/root/.scripts/update.sh" | { cat; echo "0 3 * * 0 /root/.scripts/update.sh &> /dev/null"; } | crontab -
-echo "Wöchentliche Update-Cronjob wurde erstellt. immer sonntags um 3 Uhr morgens."
-echo ""
+    # cronjob prüfen und ggf. erstellen
+    if crontab -l 2>/dev/null | grep -qF "$SCRIPT_PATH"; then
+        echo "Cronjob existiert bereits, keine Änderung nötig."
+    else
+        (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+        echo "Update Cronjob wurde erstellt (sonntags um 3 Uhr)."
+    fi
+    echo ""
+fi
 
 # Warten bis GitLab bereit ist
 while ! docker exec gitlab cat /etc/gitlab/initial_root_password &> /dev/null; do
