@@ -19,7 +19,7 @@ Download and run the script directly:
 
 **Via GitLab:**
 ```bash
-curl -sSL https://gitlab.pascalheim.de/serverhype/gitlab-install/raw/main/install.sh?ref_type=heads | bash
+curl -sSL https://gitlab.pascalheim.de/serverhype/gitlab-install/-/raw/main/install.sh?ref_type=heads | bash
 ```
 
 **Via GitHub:**
