@@ -38,14 +38,18 @@ cd "${WORK_DIR}/repo"
 echo "[2/4] Fuege GitHub Remote hinzu..."
 git remote add github "$GITHUB_REPO"
 
-# Auf main Branch pushen
-echo "[3/4] Wechsle zum Standard-Branch..."
-DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
-git checkout -B main "origin/$DEFAULT_BRANCH"
+# Auf sauberen Branch wechseln
+echo "[3/4] Wechsle zum sauberen Branch..."
+if git show-ref --verify --quiet refs/remotes/origin/clean-gitpush-script; then
+    echo "Verwende clean-gitpush-script Branch (saubere Historie)"
+    git checkout clean-gitpush-script
+else
+    DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
+    git checkout "$DEFAULT_BRANCH"
+fi
 
 echo "[4/4] Pushe nach GitHub (main)..."
-git commit --allow-empty -m "$COMMIT_MSG"
-git push github main --force
+git push github HEAD:main --force
 
 # Aufraeumen
 rm -rf "$WORK_DIR"
