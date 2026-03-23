@@ -227,9 +227,9 @@ services:
       - "${port}:80"
       ${SSH_COMMENT}- "${ssh_port}:22"
     volumes:
-      - ./daten/config:/etc/gitlab
-      - ./daten/logs:/var/log/gitlab
-      - ./daten/data:/var/opt/gitlab
+      - /root/gitlab/daten/config:/etc/gitlab
+      - /root/gitlab/daten/logs:/var/log/gitlab
+      - /root/gitlab/daten/data:/var/opt/gitlab
 EOF
 
 # .env Datei erstellen
